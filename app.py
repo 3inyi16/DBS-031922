@@ -1,27 +1,49 @@
-from flask import Flask, request, render_template
-import joblib
-file_path = r"C:\Users\minyi.LAPTOP-TSJ2HKRC\OneDrive - T-RECs.ai Pte. Ltd\ntu mod2"
+#!/usr/bin/env python
+# coding: utf-8
 
-app = Flask(__name__) #__xx__
+# In[1]:
 
-#which directory is file in
-@app.route("/", methods = ["GET", "POST"])
+
+from flask import Flask
+
+
+# In[2]:
+
+
+app = Flask(__name__)
+
+
+# In[3]:
+
+
+from flask import request, render_template
+import joblib 
+
+@app.route("/", methods=["GET", "POST"])
 def index():
-    if request.method == "POST": #when user press 'Enter' in front end
-        num = request.form.get("rates")
-        #print(num)
-        model = joblib.load('{0}\DBS_regression'.format(file_path))
-        pred = model.predict([[float(num)]])
-        #print(pred)
-        s = "Predicted DBS Share Price : " + str(pred)
-        #print(s)
-        return(render_template("index.html", results=s))
-
-    else: #before user press 'Enter' in front end
-        return(render_template("index.html", results="DBS Share Price Prediction"))
+    if request.method == "POST":
+        rates = request.form.get("rates")
+        print(rates)
+        model = joblib.load("DBS")
+        pred = model.predict([[float(rates)]])
+        print(pred)
+        s = "The predicted DBS share price is " + str(pred[0][0])
+        return(render_template("index.html", result=s))
+    else:
+        return(render_template("index.html", result="No Input"))
 
 
-if __name__ == "__main__": #need this to run in cloud environment, to verify that code is mine
+# In[ ]:
+
+
+if __name__ =="__main__":
     app.run()
-    
 
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
